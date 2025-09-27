@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✓</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .line {
+            font-size: clamp(4rem, 12vw, 12rem);
+            font-weight: 700;
+            line-height: 0.85;
+            margin-bottom: clamp(1rem, 3vw, 2rem);
+        }
+
+        .name {
+            font-size: clamp(2.5rem, 7vw, 6rem);
+            font-weight: 700;
+            line-height: 0.9;
+            margin: clamp(3rem, 8vw, 6rem) 0;
+        }
+
+        .counter {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 1;
+        }
+
+        .cta {
+            background: #000;
+            color: #fff;
+            border: 2px solid #fff;
+            padding: clamp(1.5rem, 4vw, 2.5rem) clamp(3rem, 8vw, 5rem);
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-family: inherit;
+            margin-top: clamp(3rem, 8vw, 6rem);
+        }
+
+        .cta:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .cta:active {
+            background: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="line">SUPPORT YOUR LOCAL</div>
+    <div class="line">TATTOO ARTIST</div>
+    <div class="name">ELECTRIC THERAPY TATTOOS</div>
+    <a href="https://www.instagram.com/electric_therapy_tattoos/" class="cta" id="cta">FOLLOW US</a>
+    
+    <div class="counter" id="counter">10</div>
+
+    <script>
+        let time = 10;
+        const counter = document.getElementById('counter');
+        const cta = document.getElementById('cta');
+        
+        const timer = setInterval(() => {
+            time--;
+            counter.textContent = time;
+            
+            if (time <= 0) {
+                clearInterval(timer);
+                // Force redirect
+                window.open('https://www.instagram.com/electric_therapy_tattoos/', '_blank');
+                window.location.replace('https://www.instagram.com/electric_therapy_tattoos/');
+            }
+        }, 1000);
+        
+        cta.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearInterval(timer);
+            // Force redirect
+            window.open('https://www.instagram.com/electric_therapy_tattoos/', '_blank');
+            window.location.replace('https://www.instagram.com/electric_therapy_tattoos/');
+        });
+    </script>
+</body>
+</html>

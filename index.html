@@ -141,6 +141,14 @@
             color: #000;
         }
 
+        .instruction {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 500;
+            line-height: 0.9;
+            margin-top: clamp(2rem, 5vw, 3rem);
+            opacity: 0.8;
+        }
+
         /* Mobile adjustments */
         @media (max-width: 768px) {
             .social-buttons {
@@ -170,7 +178,8 @@
         <div class="line">SUPPORT YOUR LOCAL</div>
         <div class="line">TATTOO ARTIST</div>
         <div class="name">ELECTRIC THERAPY TATTOOS</div>
-        <div id="platformMessage" class="name"></div>
+        <button class="social-btn" id="followBtn" onclick="redirectToSocial()">FOLLOW US</button>
+        <div class="instruction">SHOW THIS TO OUR ARTIST</div>
         <div class="counter" id="counter">10</div>
     </div>
 

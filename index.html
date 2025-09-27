@@ -207,8 +207,8 @@
             selectedPlatform = platform;
             redirectUrl = platforms[platform].url;
             
-            // Update the message
-            document.getElementById('platformMessage').textContent = platforms[platform].message;
+            // Update the follow button text
+            document.getElementById('followBtn').textContent = `FOLLOW US ON ${platform.toUpperCase()}`;
             
             // Show success screen
             document.getElementById('selectionScreen').style.display = 'none';
@@ -234,9 +234,21 @@
         }
         
         function redirectToSocial() {
-            // Force redirect
-            window.open(redirectUrl, '_blank');
-            window.location.replace(redirectUrl);
+            if (!redirectUrl) return;
+            
+            // Force redirect with multiple methods
+            try {
+                // Try to open in new tab first
+                const newWindow = window.open(redirectUrl, '_blank');
+                
+                // If popup blocker prevents new tab, redirect current window
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 100);
+            } catch (error) {
+                // Fallback - direct redirect
+                window.location.href = redirectUrl;
+            }
         }
         
         function goBack() {
@@ -245,14 +257,19 @@
                 timer = null;
             }
             
+            // Reset state
+            selectedPlatform = '';
+            redirectUrl = '';
+            
             document.getElementById('successScreen').style.display = 'none';
             document.getElementById('selectionScreen').style.display = 'flex';
             
-            // Reset counter
+            // Reset counter and button text
             document.getElementById('counter').textContent = '10';
+            document.getElementById('followBtn').textContent = 'FOLLOW US';
         }
         
-        // Click anywhere on success screen to redirect immediately
+        // Click follow button or anywhere on success screen to redirect immediately
         document.getElementById('successScreen').addEventListener('click', function(e) {
             if (e.target.classList.contains('back-btn')) return;
             

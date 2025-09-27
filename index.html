@@ -34,6 +34,69 @@
             letter-spacing: 0.02em;
         }
 
+        /* Selection Screen */
+        .selection-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .selection-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 0.9;
+            margin-bottom: clamp(2rem, 5vw, 4rem);
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(1.5rem, 4vw, 3rem);
+            width: 100%;
+            max-width: 600px;
+            padding: 0 2rem;
+        }
+
+        .social-btn {
+            background: #000;
+            color: #fff;
+            border: 3px solid #fff;
+            padding: clamp(1.5rem, 4vw, 2.5rem) clamp(2rem, 6vw, 4rem);
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            font-family: inherit;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .social-btn:hover {
+            background: #fff;
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        .social-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Success Screen */
+        .success-screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+        }
+
         .line {
             font-size: clamp(4rem, 12vw, 12rem);
             font-weight: 700;
@@ -57,63 +120,137 @@
             line-height: 1;
         }
 
-        .cta {
-            background: #000;
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: #333;
             color: #fff;
             border: 2px solid #fff;
-            padding: clamp(1.5rem, 4vw, 2.5rem) clamp(3rem, 8vw, 5rem);
-            font-size: clamp(2rem, 6vw, 4rem);
+            padding: 10px 15px;
+            font-size: 1rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.02em;
             cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
             font-family: inherit;
-            margin-top: clamp(3rem, 8vw, 6rem);
+            letter-spacing: 0.02em;
         }
 
-        .cta:hover {
+        .back-btn:hover {
             background: #fff;
             color: #000;
         }
 
-        .cta:active {
-            background: #ccc;
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .social-buttons {
+                padding: 0 1rem;
+            }
+            
+            .selection-title {
+                margin-bottom: 3rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="line">SUPPORT YOUR LOCAL</div>
-    <div class="line">TATTOO ARTIST</div>
-    <div class="name">ELECTRIC THERAPY TATTOOS</div>
-    <a href="https://www.instagram.com/electric_therapy_tattoos/" class="cta" id="cta">FOLLOW US</a>
-    
-    <div class="counter" id="counter">10</div>
+    <!-- Selection Screen -->
+    <div id="selectionScreen" class="selection-screen">
+        <div class="selection-title">CHOOSE YOUR PLATFORM</div>
+        <div class="social-buttons">
+            <button class="social-btn" onclick="selectPlatform('instagram')">📱 INSTAGRAM</button>
+            <button class="social-btn" onclick="selectPlatform('tiktok')">🎵 TIKTOK</button>
+            <button class="social-btn" onclick="selectPlatform('facebook')">👥 FACEBOOK</button>
+        </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="successScreen" class="success-screen">
+        <button class="back-btn" onclick="goBack()">← BACK</button>
+        <div class="line">SUPPORT YOUR LOCAL</div>
+        <div class="line">TATTOO ARTIST</div>
+        <div class="name">ELECTRIC THERAPY TATTOOS</div>
+        <div id="platformMessage" class="name"></div>
+        <div class="counter" id="counter">10</div>
+    </div>
 
     <script>
-        let time = 10;
-        const counter = document.getElementById('counter');
-        const cta = document.getElementById('cta');
+        let selectedPlatform = '';
+        let timer = null;
+        let redirectUrl = '';
         
-        const timer = setInterval(() => {
-            time--;
-            counter.textContent = time;
-            
-            if (time <= 0) {
-                clearInterval(timer);
-                // Force redirect
-                window.open('https://www.instagram.com/electric_therapy_tattoos/', '_blank');
-                window.location.replace('https://www.instagram.com/electric_therapy_tattoos/');
+        const platforms = {
+            instagram: {
+                url: 'https://www.instagram.com/electric_therapy_tattoos/',
+                message: 'FOLLOWING ON INSTAGRAM'
+            },
+            tiktok: {
+                url: 'https://www.tiktok.com/@electrictherapytattoos?lang=en',
+                message: 'FOLLOWING ON TIKTOK'
+            },
+            facebook: {
+                url: 'https://www.facebook.com/electrictherapytattoostudio/',
+                message: 'FOLLOWING ON FACEBOOK'
             }
-        }, 1000);
+        };
         
-        cta.addEventListener('click', (e) => {
-            e.preventDefault();
-            clearInterval(timer);
+        function selectPlatform(platform) {
+            selectedPlatform = platform;
+            redirectUrl = platforms[platform].url;
+            
+            // Update the message
+            document.getElementById('platformMessage').textContent = platforms[platform].message;
+            
+            // Show success screen
+            document.getElementById('selectionScreen').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'flex';
+            
+            // Start countdown
+            startCountdown();
+        }
+        
+        function startCountdown() {
+            let time = 10;
+            const counter = document.getElementById('counter');
+            
+            timer = setInterval(() => {
+                time--;
+                counter.textContent = time;
+                
+                if (time <= 0) {
+                    clearInterval(timer);
+                    redirectToSocial();
+                }
+            }, 1000);
+        }
+        
+        function redirectToSocial() {
             // Force redirect
-            window.open('https://www.instagram.com/electric_therapy_tattoos/', '_blank');
-            window.location.replace('https://www.instagram.com/electric_therapy_tattoos/');
+            window.open(redirectUrl, '_blank');
+            window.location.replace(redirectUrl);
+        }
+        
+        function goBack() {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+            
+            document.getElementById('successScreen').style.display = 'none';
+            document.getElementById('selectionScreen').style.display = 'flex';
+            
+            // Reset counter
+            document.getElementById('counter').textContent = '10';
+        }
+        
+        // Click anywhere on success screen to redirect immediately
+        document.getElementById('successScreen').addEventListener('click', function(e) {
+            if (e.target.classList.contains('back-btn')) return;
+            
+            if (timer) {
+                clearInterval(timer);
+                redirectToSocial();
+            }
         });
     </script>
 </body>
